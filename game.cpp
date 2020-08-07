@@ -9,11 +9,8 @@ Game::Game(int width, int height) : Game() {
     videoMode.height = height;
     window = new sf::RenderWindow(videoMode, "RayCaster");
 
-    player.setRadius(4.f);
-    player.setFillColor(sf::Color::Yellow);
-    player.setPosition(sf::Vector2f(100.f, 100.f));
-
-    //player = sf::Vertex(sf::Vector2f(10.f, 50.f), sf::Color::Black);
+    // Corregir el constructor del jugador
+    dTime = clock.restart().asSeconds();
 }
 
 Game::~Game() {
@@ -28,18 +25,23 @@ void Game::update()
         if(event.type == sf::Event::Closed)
             window->close();
     }
+    player.update(dTime);
     
 }
 void Game::render() {
     window->clear(sf::Color(220, 220, 220, 255));
 
     // Draw Game Objects
-    //window->draw(&player, 1, sf::Points);
-    window->draw(player);
+    
+    player.draw(*window, states);
     window->display();
 }
 
 // Accessors
 const bool Game::isRunning() const {
     return window->isOpen();
+}
+
+void Game::getTime() {
+    dTime = clock.restart().asSeconds();
 }

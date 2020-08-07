@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
+#include "player.hpp"
 
 class Game
 {
@@ -17,13 +18,17 @@ public:
     void render();
     // Accessors
     const bool isRunning() const;
+    void getTime();
 
 private:
     sf::RenderWindow* window;
     sf::Event event;
     sf::VideoMode videoMode;
-    sf::CircleShape player;
-    //sf::Vertex player;
+    sf::RenderStates states;
+    sf::Clock clock;
+    float dTime;
+    Player player;
+
 
 };
 

@@ -14,6 +14,7 @@ int main()
         game.update();
         // Render
         game.render();
+        game.getTime();
         
     }
 
