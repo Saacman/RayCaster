@@ -18,7 +18,7 @@ bool TileMap::load(sf::Vector2u tileSize, const int* tiles, int width, int heigh
             quad[3].position = sf::Vector2f(i * tileSize.x       +1, (j + 1) * tileSize.y  -1);
             
             // Set the color of each Quad's points
-            sf::Color color = tiles[i + j * width] ? sf::Color::Black : sf::Color::White;
+            sf::Color color = tiles[i + j * width] ? sf::Color(130, 84, 50) : sf::Color(128, 199, 31);
             quad[0].color = color;
             quad[1].color = color;
             quad[2].color = color;

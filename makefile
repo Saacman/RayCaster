@@ -17,7 +17,7 @@ OBJS += -lsfml-audio
 all: $(OBJS)
 	g++ $(CPPFLAGS) -o $(PROGNAME) $(OBJS)
 
-player: tilemap.cpp tilemap.hpp
+tilemap: tilemap.cpp tilemap.hpp
 	g++ $(CPPFLAGS) -c tilemap.cpp
 
 player: player.cpp player.hpp

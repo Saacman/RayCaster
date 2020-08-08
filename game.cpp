@@ -23,6 +23,7 @@ Game::Game(int width, int height) : Game() {
         1, 1, 1, 1, 1, 1, 1, 1
     };
     map.load(sf::Vector2u(64,64), level, 8, 8);
+    player.map = level;
 }
 
 Game::~Game() {
@@ -41,6 +42,7 @@ void Game::update()
     player.update(dTime);
     
 }
+
 void Game::render() {
     window->clear(sf::Color(220, 220, 220, 255));
     
