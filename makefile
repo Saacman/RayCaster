@@ -7,6 +7,7 @@ CPPFLAGS = -std=c++14 -Wall
 OBJS  = main.o
 OBJS += game.o
 OBJS += player.o
+OBJS += tilemap.o
 OBJS += -lsfml-graphics
 OBJS += -lsfml-window
 OBJS += -lsfml-system
@@ -15,6 +16,9 @@ OBJS += -lsfml-audio
 
 all: $(OBJS)
 	g++ $(CPPFLAGS) -o $(PROGNAME) $(OBJS)
+
+player: tilemap.cpp tilemap.hpp
+	g++ $(CPPFLAGS) -c tilemap.cpp
 
 player: player.cpp player.hpp
 	g++ $(CPPFLAGS) -c player.cpp

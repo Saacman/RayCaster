@@ -1,7 +1,7 @@
 #include "game.hpp"
 
 // Default Constructor
-Game::Game() : window(nullptr) { }
+Game::Game() : window(nullptr){ }
 
 // Constructor
 Game::Game(int width, int height) : Game() {
@@ -11,10 +11,23 @@ Game::Game(int width, int height) : Game() {
 
     // Corregir el constructor del jugador
     dTime = clock.restart().asSeconds();
+
+    level = new int[8 * 8]{
+        1, 1, 1, 1, 1, 1, 1, 1,
+        1, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 0, 1, 1, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 1,
+        1, 0, 1, 0, 0, 0, 0, 1,
+        1, 0, 1, 1, 0, 0, 0, 1,
+        1, 0, 0, 0, 0, 0, 0, 1,
+        1, 1, 1, 1, 1, 1, 1, 1
+    };
+    map.load(sf::Vector2u(64,64), level, 8, 8);
 }
 
 Game::~Game() {
     delete window;
+    delete level;
 }
 //Functions
 void Game::update()
@@ -30,10 +43,10 @@ void Game::update()
 }
 void Game::render() {
     window->clear(sf::Color(220, 220, 220, 255));
-
-    // Draw Game Objects
     
-    player.draw(*window, states);
+    // Draw Game Objects
+    window->draw(map);
+    window->draw(player);
     window->display();
 }
 

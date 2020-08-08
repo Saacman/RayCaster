@@ -5,6 +5,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include "player.hpp"
+#include "tilemap.hpp"
 
 class Game
 {
@@ -24,12 +25,11 @@ private:
     sf::RenderWindow* window;
     sf::Event event;
     sf::VideoMode videoMode;
-    sf::RenderStates states;
     sf::Clock clock;
     float dTime;
     Player player;
-
-
+    TileMap map;
+    int* level;
 };
 
 #endif
