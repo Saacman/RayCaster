@@ -1,8 +1,10 @@
 #include <math.h>
 #include "rays.hpp"
 #define PI 3.1415926536
+#define RADIAN PI / 180
 #define HALF_PI PI/2
 #define HALF_3PI 3*PI/2
+
 Rays::Rays() {}
 Rays::Rays(int nrays) : norays(nrays) {
     m_vertices.setPrimitiveType(sf::Lines);
@@ -17,12 +19,14 @@ float distance(float ax, float ay, float bx, float by) {
 void Rays::computeRays(sf::Vector2f position, float angle, const int* map) {
     float tileStepX, tileStepY, VXintercept = position.x, VYintercept, HXintercept, HYintercept;
     int mapx, mapy, mapp, depth;
-    float rangle = angle;
+    float rangle = angle - RADIAN * (norays/2);
+    if(rangle < 0) rangle += 2 * PI;
+    if(rangle > 2*PI) rangle -= 2 * PI;
     for(int i = 0; i < norays; i++) {
         depth = 0;
         // Horizontal lines
         float ncotan = -1 / tan(rangle);
-        float disth = 100000000.f, distv = 100000000.f;
+        float disth = 1000000000.f, distv = 1000000000.f;
         if(rangle > PI) { // Looking up
             HYintercept = (((int)position.y >> 6) << 6) - 0.0001; // Remove the less significant bits to get a 64 multiple
             HXintercept = (position.y - HYintercept) * ncotan + position.x;
@@ -99,8 +103,11 @@ void Rays::computeRays(sf::Vector2f position, float angle, const int* map) {
         ray[0].position = position;
         if(disth < distv) ray[1].position = sf::Vector2f(HXintercept, HYintercept);
         if(distv < disth) ray[1].position = sf::Vector2f(VXintercept, VYintercept);
-        ray[0].color = sf::Color::Blue;
-        ray[1].color = sf::Color::Blue;
+        ray[0].color = sf::Color::Red;
+        ray[1].color = sf::Color::Red;
+        rangle += RADIAN;
+        if(rangle < 0) rangle += 2 * PI;
+        if(rangle > 2*PI) rangle -= 2 * PI;
     }
 }
 
