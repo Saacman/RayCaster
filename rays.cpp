@@ -6,9 +6,10 @@
 #define HALF_3PI 3*PI/2
 
 Rays::Rays() {}
-Rays::Rays(int nrays) : norays(nrays) {
+Rays::Rays(int nrays) : norays(nrays), lines(nrays) {
     m_vertices.setPrimitiveType(sf::Lines);
     m_vertices.resize(nrays * 2);
+    // Aqui debo inicializar las lineas
 }
 Rays::~Rays() {}
 
@@ -16,6 +17,11 @@ float distance(float ax, float ay, float bx, float by) {
     return (sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)));
 }
 
+float min(float a, float b) {
+    if(a<b) return a;
+    if(a<b) return b;
+    return a;
+}
 void Rays::computeRays(sf::Vector2f position, float angle, const int* map) {
     float tileStepX, tileStepY, VXintercept = position.x, VYintercept, HXintercept, HYintercept;
     int mapx, mapy, mapp, depth;
@@ -99,18 +105,33 @@ void Rays::computeRays(sf::Vector2f position, float angle, const int* map) {
             }
         }
         
+        // Draw the rays
         sf::Vertex* ray = &m_vertices[i * 2];
         ray[0].position = position;
         if(disth < distv) ray[1].position = sf::Vector2f(HXintercept, HYintercept);
         if(distv < disth) ray[1].position = sf::Vector2f(VXintercept, VYintercept);
         ray[0].color = sf::Color::Red;
         ray[1].color = sf::Color::Red;
+        // Draw the walls
+        float wangle = angle - rangle;
+        if(wangle < 0) wangle += 2 * PI;
+        if(wangle > 2*PI) wangle -= 2 * PI;
+        // Remove magic numbers
+        float distW = disth < distv ? disth : distv;
+        distW *= cos(wangle);
+        sf::Color WallColor = disth < distv ? sf::Color(22, 156, 157) : sf::Color(58, 179, 218);
+        float lheight = min(( 64 * 320) / distW, 320);
+        float lorigin = 160 - lheight / 2;
+        lines.traceline(sf::Vector2f(i * 8 + 530, lorigin), sf::Vector2f(i *8 + 530, lheight + lorigin), WallColor, 8, i);
+        // Update the angle for the next ray
         rangle += RADIAN;
         if(rangle < 0) rangle += 2 * PI;
         if(rangle > 2*PI) rangle -= 2 * PI;
     }
+    
 }
 
 void Rays::draw(sf::RenderTarget & target, sf:: RenderStates states) const {
+    target.draw(lines);
     target.draw(m_vertices, states);
 }

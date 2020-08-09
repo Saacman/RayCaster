@@ -9,6 +9,7 @@ OBJS += game.o
 OBJS += player.o
 OBJS += tilemap.o
 OBJS += rays.o
+OBJS += line.o
 OBJS += -lsfml-graphics
 OBJS += -lsfml-window
 OBJS += -lsfml-system
@@ -17,6 +18,9 @@ OBJS += -lsfml-audio
 
 all: $(OBJS)
 	g++ $(CPPFLAGS) -o $(PROGNAME) $(OBJS)
+
+line: line.cpp line.hpp
+	g++ $(CPPFLAGS) -c line.cpp
 
 rays: rays.cpp rays.hpp
 	g++ $(CPPFLAGS) -c rays.cpp

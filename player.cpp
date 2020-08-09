@@ -3,7 +3,7 @@
 #define PI 3.1415926536
 
 // Default Constructor
-Player::Player() : position(100.f, 200.f), angle(0.0), speed(120.f), angularvel(11.f), rays(360) {
+Player::Player() : position(100.f, 200.f), angle(0.0), speed(120.f), angularvel(5.f), rays(60) {
     body.setRadius(4.f);
     body.setFillColor(sf::Color::Magenta);
     body.setOrigin(body.getRadius(), body.getRadius());

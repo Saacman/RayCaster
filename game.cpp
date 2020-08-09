@@ -5,9 +5,11 @@ Game::Game() : window(nullptr){ }
 
 // Constructor
 Game::Game(int width, int height) : Game() {
+    
+    settings.antialiasingLevel = 8;
     videoMode.width = width;
     videoMode.height = height;
-    window = new sf::RenderWindow(videoMode, "RayCaster");
+    window = new sf::RenderWindow(videoMode, "RayCaster", sf::Style::Default, settings);
 
     // Corregir el constructor del jugador
     dTime = clock.restart().asSeconds();
@@ -15,7 +17,7 @@ Game::Game(int width, int height) : Game() {
     level = new int[8 * 8]{
         1, 1, 1, 1, 1, 1, 1, 1,
         1, 0, 0, 0, 0, 0, 0, 1,
-        1, 0, 0, 1, 1, 0, 0, 1,
+        1, 0, 0, 1, 1, 1, 0, 1,
         1, 0, 0, 0, 0, 0, 0, 1,
         1, 0, 1, 0, 0, 0, 0, 1,
         1, 0, 1, 1, 0, 0, 0, 1,
@@ -40,11 +42,10 @@ void Game::update()
             window->close();
     }
     player.update(dTime);
-    
 }
 
 void Game::render() {
-    window->clear(sf::Color(220, 220, 220, 255));
+    window->clear(sf::Color(0 ,0 , 0, 255));//sf::Color(220, 220, 220, 255));
     
     // Draw Game Objects
     window->draw(map);

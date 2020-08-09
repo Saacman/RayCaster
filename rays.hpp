@@ -2,6 +2,7 @@
 #define RAYS_HPP
 
 #include <SFML/Graphics.hpp>
+#include "line.hpp"
 
 class Rays : public sf::Drawable
 {
@@ -14,6 +15,7 @@ private:
     virtual void draw(sf::RenderTarget & target, sf:: RenderStates states) const;
     sf::VertexArray m_vertices;
     int norays;
+    Line lines;
 };
 
 #endif

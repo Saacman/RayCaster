@@ -25,6 +25,7 @@ private:
     sf::RenderWindow* window;
     sf::Event event;
     sf::VideoMode videoMode;
+    sf::ContextSettings settings;
     sf::Clock clock;
     float dTime;
     Player player;
