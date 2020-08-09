@@ -22,7 +22,11 @@ Player::~Player() {
 }
 // TODO: remove magic numbers
 // Functions
+
 void Player::update(float dTime) {
+    // find the position in the map
+    sf::Vector2f prevpos = position;
+    
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         position.x += speed * dTime * cos(angle);
         position.y += speed * dTime * sin(angle);
@@ -39,6 +43,9 @@ void Player::update(float dTime) {
         angle += angularvel * dTime;
         if(angle > 2 * PI) angle -= 2 * PI;
     }
+    int x = (int)position.x >> 6;
+    int y = (int)position.y >> 6;
+    if(map[x + 8 * y]) position = prevpos;
     // A method that takes the position and angular position to upate the direction
     direction[0].position = position;
     direction[1].position = position + sf::Vector2f(25.f * cos(angle), 25.f * sin(angle));

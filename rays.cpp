@@ -85,7 +85,7 @@ void Rays::computeRays(sf::Vector2f position, float angle, const int* map) {
             mapy = (int)VYintercept >> 6;
             // Find the position in the array
             mapp = mapy * 8 + mapx; // Magic number
-            if(mapp > 0 && mapp < (8 * 8) && map[mapp] == 1) {
+            if(mapp > 0 && mapp < (8 * 8) && map[mapp]) {
                 distv = distance(position.x, position.y, VXintercept, VYintercept);
                 depth = 8; // Hit the wall
             } else {
