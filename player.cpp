@@ -8,7 +8,6 @@ Player::Player() : position(100.f, 200.f), angle(0.0), speed(120.f), angularvel(
     body.setFillColor(sf::Color::Magenta);
     body.setOrigin(body.getRadius(), body.getRadius());
     body.setPosition(position);
-    rays.computeRays(position, angle, map);
     // From here it could be a new class
     direction.setPrimitiveType(sf::Lines);
     direction.resize(2);

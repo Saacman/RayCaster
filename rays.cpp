@@ -15,7 +15,7 @@ float distance(float ax, float ay, float bx, float by) {
 }
 
 void Rays::computeRays(sf::Vector2f position, float angle, const int* map) {
-    float tileStepX, tileStepY, xstep, ystep;
+    float tileStepX, tileStepY, VXintercept = position.x, VYintercept, HXintercept, HYintercept;
     int mapx, mapy, mapp, depth;
     float rangle = angle;
     for(int i = 0; i < norays; i++) {
@@ -24,87 +24,83 @@ void Rays::computeRays(sf::Vector2f position, float angle, const int* map) {
         float ncotan = -1 / tan(rangle);
         float disth = 100000000.f, distv = 100000000.f;
         if(rangle > PI) { // Looking up
-            ystep = (((int)position.y >> 6) << 6) - 0.0001; // Remove the less significant bits to get a 64 multiple
-            xstep = (position.y - ystep) * ncotan + position.x;
+            HYintercept = (((int)position.y >> 6) << 6) - 0.0001; // Remove the less significant bits to get a 64 multiple
+            HXintercept = (position.y - HYintercept) * ncotan + position.x;
             tileStepY = -64;// Tile size
             tileStepX = -tileStepY * ncotan;
         }
         if(rangle < PI) { // Looking down
-            ystep = (((int)position.y >> 6) << 6) + 64; 
-            xstep = (position.y - ystep) * ncotan + position.x;
+            HYintercept = (((int)position.y >> 6) << 6) + 64; 
+            HXintercept = (position.y - HYintercept) * ncotan + position.x;
             tileStepY = 64;// Tile size
             tileStepX = -tileStepY * ncotan;
         }
         if(rangle == 0 || rangle == PI) { // Looking left or right; probably won't happen.
-            xstep = position.x;
-            ystep = position.y;
+            HXintercept = position.x;
+            HYintercept = position.y;
             depth = 8;
         }
 
         while(depth < 8) {
             // Find the position in the map
-            mapx = (int)xstep >> 6;
-            mapy = (int)ystep >> 6;
+            mapx = (int)HXintercept >> 6;
+            mapy = (int)HYintercept >> 6;
             // Find the position in the array
             mapp = mapy * 8 + mapx; // Magic number
             if(mapp > 0 && mapp < (8 * 8) && map[mapp] == 1) {
-                disth = distance(position.x, position.y, xstep, ystep);
+                disth = distance(position.x, position.y, HXintercept, HYintercept);
                 depth = 8; // Hit the wall
             } else {
-                xstep += tileStepX;
-                ystep += tileStepY;
+                HXintercept += tileStepX;
+                HYintercept += tileStepY;
                 depth++;
             }
             
         }
-        float hxintercept = xstep, hyintercept = ystep;
-
+        
         // Vertical Lines
         depth = 0;
         float ntan = -tan(rangle);
         if(rangle > HALF_PI && rangle < HALF_3PI) { // Looking left
-            xstep = (((int)position.x >> 6) << 6) - 0.0001; // Remove the less significant bits to get a 64 multiple
-            ystep = (position.x - xstep) * ntan + position.y;
+            VXintercept = (((int)position.x >> 6) << 6) - 0.0001; // Remove the less significant bits to get a 64 multiple
+            VYintercept = (position.x - VXintercept) * ntan + position.y;
             tileStepX = -64;// Tile size
             tileStepY = -tileStepX * ntan;
         }
         if(rangle < HALF_PI || rangle > HALF_3PI) { // Looking right
-            xstep = (((int)position.x >> 6) << 6) + 64; 
-            ystep = (position.x - xstep) * ntan + position.y;
+            VXintercept = (((int)position.x >> 6) << 6) + 64; 
+            VYintercept = (position.x - VXintercept) * ntan + position.y;
             tileStepX = 64;
             tileStepY = -tileStepX * ntan;
         }
-        if(rangle == 0 || rangle == PI) { // Looking up or down; probably won't happen.
-            xstep = position.x;
-            ystep = position.y;
+        if(rangle == HALF_PI || rangle == HALF_3PI) { // Looking up or down; probably won't happen.
+            VXintercept = position.x;
+            VYintercept = position.y;
             depth = 8;
         }
 
         while(depth < 8) {
             // Find the position in the map
-            mapx = (int)xstep >> 6;
-            mapy = (int)ystep >> 6;
+            mapx = (int)VXintercept >> 6;
+            mapy = (int)VYintercept >> 6;
             // Find the position in the array
             mapp = mapy * 8 + mapx; // Magic number
             if(mapp > 0 && mapp < (8 * 8) && map[mapp] == 1) {
-                distv = distance(position.x, position.y, xstep, ystep);
+                distv = distance(position.x, position.y, VXintercept, VYintercept);
                 depth = 8; // Hit the wall
             } else {
-                xstep += tileStepX;
-                ystep += tileStepY;
+                VXintercept += tileStepX;
+                VYintercept += tileStepY;
                 depth++;
             }
-            
         }
-        float vxintercept = xstep, vyintercept = ystep;
         
         sf::Vertex* ray = &m_vertices[i * 2];
         ray[0].position = position;
-        if(disth < distv) ray[1].position = sf::Vector2f(hxintercept, hyintercept);
-        if(distv < disth) ray[1].position = sf::Vector2f(vxintercept, vyintercept);
+        if(disth < distv) ray[1].position = sf::Vector2f(HXintercept, HYintercept);
+        if(distv < disth) ray[1].position = sf::Vector2f(VXintercept, VYintercept);
         ray[0].color = sf::Color::Blue;
         ray[1].color = sf::Color::Blue;
-
     }
 }
 
